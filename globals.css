@@ -1,26 +1,66 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme inline {
+  --color-background: hsla(var(--background));
+  --color-foreground: hsla(var(--foreground));
+  --color-primary: hsla(var(--primary));
+  --color-primary-foreground: hsla(var(--primary-foreground));
+  --color-secondary: hsla(var(--secondary));
+  --color-secondary-foreground: hsla(var(--secondary-foreground));
+  --color-border: hsla(var(--border));
+  --color-negative: hsla(var(--negative));
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  --background: 0, 0%, 100%;
+  --foreground: 0, 0%, 21%;
+
+  --primary: 192, 60%, 15%;
+  --primary-foreground: 0, 0%, 100%;
+
+  --secondary: 305, 75%, 20%;
+  --secondary-foreground: 0, 0%, 100%;
+
+  --border: 0, 0%, 90%;
+
+  --negative: 359, 85%, 38%;
+
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0, 0%, 4%;
+    --foreground: 0, 0%, 93%;
+
+    --primary: 0, 0%, 100%;
+    --primary-foreground: 192, 93%, 16%;
+
+    --secondary: 0, 0%, 100%;
+    --secondary-foreground: 305, 75%, 20%;
+
+    --border: 0, 0%, 69%;
+
+    --negative: 359, 85%, 38%;
   }
 }
 
+* {
+  @apply border-border;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  @apply bg-background text-foreground;
+}
+
+h1 {
+  @apply text-3xl font-bold text-primary;
+}
+
+h2 {
+  @apply text-xl font-semibold text-primary;
+}
+
+h3 {
+  @apply text-lg font-medium text-primary;
 }

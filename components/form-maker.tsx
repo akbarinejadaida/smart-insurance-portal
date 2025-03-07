@@ -1,29 +1,45 @@
 "use client";
 import React, { useCallback } from "react";
 import { cn } from "@/lib/utils";
-import SelectInput from "./select-input";
+import { FaArrowRight } from "react-icons/fa";
 import TextInput from "./text-input";
+import SelectInput from "./select-input";
+import RadioInput from "./radio-input";
+import CheckboxInput from "./checkbox-input";
 
-export interface OptionType {
-  label: string | React.ReactNode;
-  value: string;
-  extraInfo?: string;
+export interface FormInterface {
+  id: string;
+  label: string;
+  type: string;
+  required?: boolean;
+  options?: string[];
+  parentValue: any;
+  parentError: any;
+  formikId: string;
+  dynamicOptions?: {
+    dependsOn: string;
+    endpoint: string;
+    method: string;
+  };
+  visibility?: {
+    dependsOn: string;
+    condition: string;
+    value: string;
+  };
+  validation?: {
+    min?: number;
+    max?: number;
+    pattern?: string;
+  };
+  fields?: FormInterface[];
 }
 
 export interface FormMakerInterface {
   form: any;
   fields: {
-    component: "text" | "select" | "textarea" | "non-field";
-    placeholder?: string;
-    labelClassName?: string;
-    label?: string | React.ReactNode;
-    key: string;
-    type?: string;
-    options?: OptionType[];
-    className?: string;
-    icon?: string | React.ReactNode;
-    defaultValue?: string | null;
-    children?: React.ReactNode;
+    formId: string;
+    title: string;
+    fields: FormInterface[];
   }[];
   className?: string;
 }
@@ -34,29 +50,49 @@ export default function FormMaker({
   className,
 }: FormMakerInterface) {
   const renderField = useCallback(
-    (item: any) => {
-      switch (item.component) {
+    (item: FormInterface) => {
+      switch (item.type) {
+        case "text":
+          return <TextInput form={form} item={item} />;
+        case "number":
+          return <TextInput form={form} item={item} />;
+        case "date":
+          return <TextInput form={form} item={item} />;
         case "select":
           return <SelectInput form={form} item={item} />;
-        case "text":
-          return <TextInput item={item} form={form} />;
-        case "textarea":
+        case "radio":
+          return <RadioInput form={form} item={item} />;
+        case "checkbox":
+          return <CheckboxInput form={form} item={item} />;
+        case "group":
           return (
-            <textarea
-              key={item.key}
-              placeholder={item.placeholder}
-              onChange={(e: any) =>
-                form.setFieldValue(item.key, e.target.value)
-              }
-              rows={5}
-              className={cn(
-                "text-subtitle text-sm w-full rounded-sm py-2 px-3 outline-none",
-                item.labelClassName
-              )}
-            />
+            <div className="flex flex-col gap-6 w-full">
+              <h3 className="flex items-center gap-4">
+                <FaArrowRight size={14} />
+                <span>{item.label}</span>
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-6">
+                {item.fields?.map((field) => {
+                  if (field?.visibility?.dependsOn) {
+                    const data =
+                      field.parentValue[field?.visibility?.dependsOn];
+                    if (data !== field.visibility.value) {
+                      return null;
+                    }
+                  }
+                  return (
+                    <div key={field.id} className="col-span-1">
+                      {renderField(field)}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           );
+
         default:
-          return null;
+          return <div className="w-full">{item.type}</div>;
       }
     },
     [form]
@@ -64,26 +100,36 @@ export default function FormMaker({
 
   return (
     <form
-      className={cn("w-full gap-x-4 gap-y-6 grid grid-cols-12", className)}
+      className={cn("w-full flex flex-col gap-3", className)}
       onSubmit={(e) => e?.preventDefault()}
     >
       {fields.map((item) => (
         <div
-          key={item.key}
-          className={cn("relative outline-none w-full", item.className)}
-          style={item.style}
+          key={item.formId}
+          className={cn("w-full flex flex-col gap-8 border rounded-sm p-6")}
         >
-          {renderField(item)}
+          <h2>{item.title}</h2>
 
-          {item.component !== "non-field" ? (
-            <small className="absolute text-destructive -bottom-2">
-              {form.errors[item.key] || form.touched[item.key]
-                ? form.errors[item.key]
-                : ""}
-            </small>
-          ) : (
-            item.children
-          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-6">
+            {item.fields.map((field) => {
+              if (field?.visibility?.dependsOn) {
+                const data = field.parentValue[field?.visibility?.dependsOn];
+                if (data !== field.visibility.value) {
+                  return null;
+                }
+              }
+              return (
+                <div
+                  key={field.id}
+                  className={cn("col-span-1", {
+                    "md:col-span-2 lg:col-span-3": field.type == "group",
+                  })}
+                >
+                  {renderField(field)}
+                </div>
+              );
+            })}
+          </div>
         </div>
       ))}
     </form>

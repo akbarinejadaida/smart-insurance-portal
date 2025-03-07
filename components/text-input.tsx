@@ -1,44 +1,26 @@
+"use client";
 import React from "react";
-import { FormMakerInterface } from "./form-maker";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { FormInterface } from "./form-maker";
 
 export default function TextInput({
   form,
   item,
 }: {
   form: any;
-  item: FormMakerInterface["fields"][0];
+  item: FormInterface;
 }) {
   return (
     <>
+      <span className="text-foreground">{item.label}</span>
       <input
-        key={item.key}
-        placeholder={item.placeholder}
-        value={form.values[item.key] || ""}
+        key={item.id}
+        placeholder={item.label}
+        value={item.parentValue[item.id] || ""}
         type={item.type}
-        onChange={(e: any) => form.setFieldValue(item.key, e.target.value)}
-        className={cn(
-          "text-muted border border-border text-sm w-full h-10 placeholder:text-sm leading-4 placeholder:text-muted outline-none px-3 py-2 rounded-sm",
-          item.labelClassName,
-          {
-            "pl-9": item.icon,
-          }
-        )}
+        onChange={(e: any) => form.setFieldValue(item.formikId, e.target.value)}
+        className="text-muted border border-border text-sm w-full h-10 placeholder:text-sm leading-4 placeholder:text-muted outline-none px-3 py-2 rounded-sm"
       />
-      {item.icon && typeof item.icon == "string" ? (
-        <Image
-          src={item.icon}
-          alt={item.key}
-          width={20}
-          height={20}
-          className="absolute left-2.5 top-2.5"
-        />
-      ) : item.icon && typeof item.icon != "string" ? (
-        <div className="absolute left-2.5 top-2.5">{item.icon}</div>
-      ) : (
-        <></>
-      )}
+      <small className="text-negative">{item.parentError?.[item.id]}</small>
     </>
   );
 }

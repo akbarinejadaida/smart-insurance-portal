@@ -1,13 +1,14 @@
 import { fetchService } from "@/boot/fetch-service";
+import { FormWrapperInterface } from "@/components/form-wrapper";
 
-export async function getForms(): Promise<InsuranceFormOutputInterface | undefined> {
+export async function getForms(): Promise<InsuranceFormOutputInterface> {
   try {
-    const response = await fetchService('insurance/forms');
-    return response
+    const response: InsuranceFormOutputInterface['forms'] = await fetchService('insurance/forms');
+    return { forms: response }
   }
   catch (err) {
     console.error(err);
-    return
+    return { forms: [] }
   }
 }
 
@@ -37,7 +38,7 @@ export async function getSubmittedApplications(): Promise<ApplicationInterface |
 }
 
 export interface InsuranceFormOutputInterface {
-
+  forms: FormWrapperInterface['forms']
 }
 
 export interface FormSubmitOutputInterface {

@@ -1,49 +1,78 @@
-import React, { useEffect, useCallback } from "react";
-import { FormMakerInterface, OptionType } from "./form-maker";
+"use client";
+import React, { useCallback, useState, useEffect } from "react";
+import { FormInterface } from "./form-maker";
 import Creatable from "react-select/creatable";
 import { cn } from "@/lib/utils";
+import { fetchService } from "@/boot/fetch-service";
 
 const SelectInput = React.memo(function SelectInput({
   form,
   item,
 }: {
   form: any;
-  item: FormMakerInterface["fields"][0];
+  item: FormInterface;
 }) {
-  const handleValueChange = useCallback(
-    (selectedOption: OptionType) => {
-      form.setFieldValue(item.key, selectedOption?.value || undefined);
-    },
-    [item.key]
-  );
+  const { id, parentError, formikId } = item;
+  const [options, setOptions] = useState(item.options || []);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    if (item.defaultValue && !form.values[item.key]) {
-      form.setFieldValue(item.key, item.defaultValue);
+    setIsClient(true);
+  }, []);
+
+  const handleValueChange = useCallback(
+    (selectedOption: any) => {
+      form.setFieldValue(formikId, selectedOption?.value || undefined);
+    },
+    [form, formikId]
+  );
+
+  const fetchDynamicOptions = async () => {
+    try {
+      if (
+        item?.dynamicOptions?.dependsOn &&
+        item?.parentValue?.[item?.dynamicOptions?.dependsOn]
+      ) {
+        const data = await fetchService(
+          `${item.dynamicOptions.endpoint.replace("/api/", "")}?country=${
+            item?.parentValue?.[item?.dynamicOptions?.dependsOn]
+          }`
+        );
+
+        setOptions(data?.states || []);
+      }
+    } catch (error) {
+      console.error("Error fetching dynamic options", error);
     }
-  }, [item.defaultValue, form.values[item.key], item.key]);
+  };
+
+  useEffect(() => {
+    if (
+      item?.dynamicOptions?.dependsOn &&
+      item?.parentValue?.[item?.dynamicOptions?.dependsOn]
+    ) {
+      fetchDynamicOptions();
+    }
+  }, [item?.parentValue]);
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <>
+      <span className="text-foreground">{item.label}</span>
       <Creatable
         isClearable
         isValidNewOption={() => false}
-        options={item.options}
-        onChange={(item: any) => handleValueChange(item)}
-        placeholder={
-          item.options?.find(
-            (optItem) => optItem.value === form.values[item.key]
-          )?.label ||
-          item.placeholder ||
-          item.label
-        }
+        options={options?.map((value) => ({ label: value, value })) || []}
+        onChange={handleValueChange}
+        placeholder={item.parentValue[item.id] || item.label}
         classNames={{
           container: () => "w-full outline-none",
           control: () =>
             cn(
-              "outline-none relative focus:ring-0 h-10 w-full shadow-none rounded-sm bg-input text-muted border !border-border text-sm",
-              { "pl-6": item.icon },
-              item.labelClassName
+              "outline-none relative focus:ring-0 h-10 w-full shadow-none rounded-sm bg-input text-muted border !border-border text-sm"
             ),
           input: () => "w-full h-full outline-none line-clamp-1",
           placeholder: () => "line-clamp-1",
@@ -54,14 +83,11 @@ const SelectInput = React.memo(function SelectInput({
             "outline-none relative flex w-full cursor-default select-none items-center rounded-sm pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         }}
       />
-      {item.icon ? (
-        <div className="absolute left-2.5 top-2.5">
-          {typeof item.icon == "string" ? <></> : item.icon}
-        </div>
-      ) : (
-        <></>
+      {parentError?.[id] && (
+        <small className="text-negative">{parentError[id]}</small>
       )}
     </>
   );
 });
+
 export default SelectInput;

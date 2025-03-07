@@ -1,4 +1,4 @@
-import { config } from "@/config/config";
+import config from "@/config/config";
 import { toast } from "react-toastify";
 
 type MehtodType = "GET" | "POST" | "PATCH" | "DELETE" | "PUT";
@@ -38,28 +38,38 @@ export async function fetchService(
     options.body = JSON.stringify(body);
   }
 
-  const response = await fetch(
-    `${config.ServerAddress}/${version}/${url}`,
-    options
-  );
-  const data = await response.json();
+  try {
 
-  if (data.error) {
-    toast(data.error, {
-      position: "top-center",
-      style: {
-        background: "#a31111",
-        color: "#fff",
-      },
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    throw new Error(data.error);
+
+    const response = await fetch(
+      `${config.ServerAddress}/${version}/${url}`,
+      options
+    );
+
+    const data = await response.json();
+
+    if (data.error) {
+      toast(data.error, {
+        position: "top-center",
+        style: {
+          background: "#a31111",
+          color: "#fff",
+        },
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      throw new Error(data.error);
+    }
+
+    return data;
   }
+  catch (err) {
+    console.log(err);
+    throw new Error("Something went wrong")
 
-  return data;
+  }
 }
