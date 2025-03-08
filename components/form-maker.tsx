@@ -32,7 +32,7 @@ interface FieldInterface {
   };
 }
 
-export interface FormInterface extends FieldInterface {
+interface FormInterface extends FieldInterface {
   fields?: FormInterface[];
 }
 
@@ -99,6 +99,7 @@ export default function FormMaker({ fields, className }: FormMakerInterface) {
                       return null;
                     }
                   }
+
                   return (
                     <div key={field.id} className="col-span-1">
                       {renderField(field)}

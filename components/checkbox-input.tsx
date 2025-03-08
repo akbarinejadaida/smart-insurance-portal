@@ -20,10 +20,10 @@ export default function CheckboxInput({ form, item }: CheckboxInputProps) {
   };
 
   return (
-    <div>
+    <>
       <span className="text-foreground">{label}</span>
 
-      <div className="flex items-center gap-6 h-10">
+      <div className="flex flex-wrap items-center gap-6 min-h-10">
         {options.map((optItem) => (
           <label key={optItem} className="flex items-center gap-2 text-sm">
             <input
@@ -40,6 +40,6 @@ export default function CheckboxInput({ form, item }: CheckboxInputProps) {
       {parentError?.[id] && (
         <small className="text-negative">{parentError[id]}</small>
       )}
-    </div>
+    </>
   );
 }

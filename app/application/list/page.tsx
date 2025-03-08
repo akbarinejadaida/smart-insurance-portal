@@ -1,9 +1,14 @@
+import { getSubmittedApplications } from "@/api/insurance-list";
+import TableContainer from "@/components/table-container";
 import Link from "next/link";
 
-export default function ApplicationList() {
+export default async function ApplicationList() {
+  const { data } = await getData();
+  console.log({ data });
+
   return (
-    <main className="min-h-screen min-w-screen flex flex-col p-4 md:p-8 lg:p-12 gap-4 flex-wrap">
-      <div className="flex items-center justify-between w-full">
+    <main className="min-h-screen w-full flex flex-col p-4 md:p-8 lg:p-12 flex-wrap gap-8">
+      <div className="flex flex-wrap gap-4 items-center justify-between w-full">
         <h1>See Applications</h1>
         <Link
           href={"/application"}
@@ -12,6 +17,13 @@ export default function ApplicationList() {
           Submit New Applications
         </Link>
       </div>
+
+      <TableContainer rows={data.data} columns={data.columns} />
     </main>
   );
+}
+
+async function getData() {
+  const data = await getSubmittedApplications();
+  return { data };
 }

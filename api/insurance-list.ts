@@ -1,13 +1,16 @@
 import { fetchService } from "@/boot/fetch-service";
 
-export async function getSubmittedApplications(): Promise<ApplicationInterface | undefined> {
+export async function getSubmittedApplications(): Promise<ApplicationInterface> {
   try {
     const response = await fetchService('insurance/forms/submissions');
     return response
   }
   catch (err) {
     console.error(err);
-    return
+    return {
+      columns: [],
+      data: []
+    }
   }
 }
 
