@@ -1,5 +1,5 @@
 import { getForms } from "@/api/insurance-forms";
-import FormWrapper from "@/components/form-wrapper";
+import FormMaker from "@/components/form-maker";
 import Link from "next/link";
 
 export default async function Application() {
@@ -18,10 +18,15 @@ export default async function Application() {
         </Link>
       </div>
 
-      <FormWrapper
-        forms={forms}
-        className="w-full flex flex-col items-start justify-between gap-16"
-      />
+      <div className="w-full flex flex-col gap-12">
+        {forms.map((formFields) => (
+          <FormMaker
+            fields={formFields}
+            key={formFields.formId}
+            className="w-full flex flex-col gap-8 border rounded-sm p-6"
+          />
+        ))}
+      </div>
     </main>
   );
 }

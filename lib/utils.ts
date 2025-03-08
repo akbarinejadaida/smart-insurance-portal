@@ -1,18 +1,13 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { FormWrapperInterface } from "@/components/form-wrapper";
 import * as Yup from 'yup';
+import { FormMakerInterface } from "@/components/form-maker";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-
-export function generateInitialValuesAndValidation(forms: FormWrapperInterface["forms"]) {
-  const initialValues: Record<string, any> = {};
-  const validationSchema: Record<string, any> = {};
-
-  forms.forEach((form) => {
+export function generateInitialValuesAndValidation(form: FormMakerInterface['fields']) {
     const formValues: any = {};
     const formValidation: any = {};
 
@@ -120,9 +115,9 @@ export function generateInitialValuesAndValidation(forms: FormWrapperInterface["
       }
     });
 
-    initialValues[form.formId] = formValues;
-    validationSchema[form.formId] = Yup.object(formValidation);
-  });
 
-  return { initialValues, validationSchema };
+  return {
+    initialValues: formValues,
+    validationSchema: Yup.object(formValidation)
+  };
 }

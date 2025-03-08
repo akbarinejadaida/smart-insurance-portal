@@ -1,58 +1,50 @@
 import { fetchService } from "@/boot/fetch-service";
-import { FormWrapperInterface } from "@/components/form-wrapper";
+import { FormMakerInterface } from "@/components/form-maker";
+import { toast } from "sonner";
 
 export async function getForms(): Promise<InsuranceFormOutputInterface> {
   try {
-    const response: InsuranceFormOutputInterface['forms'] = await fetchService('insurance/forms');
-    return { forms: response }
-  }
-  catch (err) {
+    const response: InsuranceFormOutputInterface["forms"] = await fetchService(
+      "insurance/forms"
+    );
+    return { forms: response };
+  } catch (err) {
     console.error(err);
-    return { forms: [] }
+    toast("Something went wrong",
+      {
+        className: "bg-negative text-negative-foreground",
+        position: "top-center"
+      })
+    return { forms: [] };
   }
 }
 
-export async function submitForm(body: any): Promise<FormSubmitOutputInterface | undefined> {
+export async function submitForm(
+  body: any
+): Promise<FormSubmitOutputInterface | undefined> {
   try {
-    const response = await fetchService('insurance/forms/submit', {
-      method: 'POST',
-      body
+    const response = await fetchService("insurance/forms/submit", {
+      method: "POST",
+      body,
     });
-    return response
-  }
-  catch (err) {
+    return response;
+  } catch (err) {
     console.error(err);
-    return
-  }
-}
+    toast("Something went wrong",
+      {
+        className: "bg-secondary text-negative-foreground",
+        position: "top-center",
 
-export async function getSubmittedApplications(): Promise<ApplicationInterface | undefined> {
-  try {
-    const response = await fetchService('insurance/forms/submissions');
-    return response
-  }
-  catch (err) {
-    console.error(err);
-    return
+      }
+    )
+    return;
   }
 }
 
 export interface InsuranceFormOutputInterface {
-  forms: FormWrapperInterface['forms']
+  forms: FormMakerInterface["fields"][];
 }
 
 export interface FormSubmitOutputInterface {
-
-}
-
-export interface ApplicationInterface {
-  columns: string[];
-  data: {
-    id: string;
-    "Full Name": string;
-    Age: string;
-    "Insurance Type": string;
-    City: string;
-    Status: string;
-  }[];
+  success: boolean;
 }

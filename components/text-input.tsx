@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
-import { FormInterface } from "./form-maker";
+import { CustomFieldInterface } from "./form-maker";
 
 export default function TextInput({
   form,
   item,
 }: {
   form: any;
-  item: FormInterface;
+  item: CustomFieldInterface;
 }) {
   return (
     <>

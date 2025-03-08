@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import { FormInterface } from "./form-maker";
+import { CustomFieldInterface } from "./form-maker";
 
 interface CheckboxInputProps {
   form: any;
-  item: FormInterface;
+  item: CustomFieldInterface;
 }
 
 export default function CheckboxInput({ form, item }: CheckboxInputProps) {

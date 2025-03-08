@@ -1,5 +1,5 @@
 import config from "@/config/config";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 type MehtodType = "GET" | "POST" | "PATCH" | "DELETE" | "PUT";
 type HeaderType = Record<string, string | any>;
@@ -39,8 +39,6 @@ export async function fetchService(
   }
 
   try {
-
-
     const response = await fetch(
       `${config.ServerAddress}/${version}/${url}`,
       options
@@ -50,26 +48,15 @@ export async function fetchService(
 
     if (data.error) {
       toast(data.error, {
+        className: "bg-negative text-negative-foreground",
         position: "top-center",
-        style: {
-          background: "#a31111",
-          color: "#fff",
-        },
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
       });
       throw new Error(data.error);
     }
 
     return data;
-  }
-  catch (err) {
+  } catch (err) {
     console.log(err);
-    throw new Error("Something went wrong")
-
+    throw new Error("Something went wrong");
   }
 }

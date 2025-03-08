@@ -1,16 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import React, { useCallback, useState, useEffect } from "react";
-import { FormInterface } from "./form-maker";
+import { CustomFieldInterface } from "./form-maker";
 import Creatable from "react-select/creatable";
 import { cn } from "@/lib/utils";
 import { fetchService } from "@/boot/fetch-service";
+import { states } from "@/constants/states";
 
 const SelectInput = React.memo(function SelectInput({
   form,
   item,
 }: {
   form: any;
-  item: FormInterface;
+  item: CustomFieldInterface;
 }) {
   const { id, parentError, formikId } = item;
   const [options, setOptions] = useState(item.options || []);
@@ -28,21 +30,24 @@ const SelectInput = React.memo(function SelectInput({
   );
 
   const fetchDynamicOptions = async () => {
-    try {
-      if (
-        item?.dynamicOptions?.dependsOn &&
-        item?.parentValue?.[item?.dynamicOptions?.dependsOn]
-      ) {
+    if (
+      item?.dynamicOptions?.dependsOn &&
+      item?.parentValue?.[item?.dynamicOptions?.dependsOn]
+    ) {
+      const country = item?.parentValue?.[item?.dynamicOptions?.dependsOn];
+      try {
         const data = await fetchService(
-          `${item.dynamicOptions.endpoint.replace("/api/", "")}?country=${
-            item?.parentValue?.[item?.dynamicOptions?.dependsOn]
-          }`
+          `${item.dynamicOptions.endpoint.replace(
+            "/api/",
+            ""
+          )}?country=${country}`
         );
 
-        setOptions(data?.states || []);
+        setOptions(data?.states || (states as any)[country]?.["states"] || []);
+      } catch (error) {
+        console.error("Error fetching dynamic options", error);
+        setOptions((states as any)[country]?.["states"] || []);
       }
-    } catch (error) {
-      console.error("Error fetching dynamic options", error);
     }
   };
 
@@ -53,7 +58,11 @@ const SelectInput = React.memo(function SelectInput({
     ) {
       fetchDynamicOptions();
     }
-  }, [item?.parentValue]);
+  }, [
+    item?.dynamicOptions?.dependsOn
+      ? item?.parentValue?.[item?.dynamicOptions?.dependsOn]
+      : "",
+  ]);
 
   if (!isClient) {
     return null;
