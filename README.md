@@ -38,19 +38,23 @@ This is a Smart Insurance Application Portal that allows users to apply for diff
   ```
    git clone https://github.com/akbarinejadaida/smart-insurance-portal.git
    cd your-repository
+  ```
 
 2. Install dependencies:
   ```
   npm install
+  ```
 
 3. Run in development mode:
   ```
   npm run dev
+  ```
 
 4. Build and start in production mode:
   ```
   npm run build
   npm run start
+  ```
 
 ## Known Issues
 
