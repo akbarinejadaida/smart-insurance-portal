@@ -70,6 +70,4 @@ Possible fixes include setting appropriate CORS headers on the backend.
 
 # Deployment
 
-The application is not deployed yet, but once deployed, the live URL will be updated here.
-
-**Live URL:** _Coming soon..._
+**Live URL:** (https://smart-insurance-portal-rljkvukrm-akbarinejadaida-hobbies.vercel.app/)
