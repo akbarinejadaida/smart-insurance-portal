@@ -6,7 +6,7 @@ export default async function Application() {
   const { forms } = await getData();
 
   return (
-    <main className="min-h-screen w-full flex flex-col p-4 md:p-8 lg:p-12 flex-wrap gap-8">
+    <main className="min-h-[calc(100vh-40px)] w-full flex flex-col p-4 md:p-8 lg:p-12 flex-wrap gap-8">
       <div className="flex flex-wrap gap-4 items-center justify-between w-full">
         <h1>Submit New Application</h1>
 

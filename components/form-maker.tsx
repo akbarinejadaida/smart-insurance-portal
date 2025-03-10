@@ -62,7 +62,6 @@ export default function FormMaker({ fields, className }: FormMakerInterface) {
     initialValues,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
       submitForm(values);
     },
   });

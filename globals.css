@@ -35,23 +35,23 @@
 
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: 0, 0%, 4%;
-    --foreground: 0, 0%, 93%;
+.dark {
+  --background: 0, 0%, 4%;
+  --foreground: 0, 0%, 93%;
 
-    --primary: 0, 0%, 100%;
-    --primary-foreground: 192, 93%, 16%;
+  --primary: 192, 100%, 40%;
+  --primary-foreground: 0, 0%, 100%;
 
-    --secondary: 0, 0%, 100%;
-    --secondary-foreground: 305, 75%, 20%;
+  --secondary: 305, 100%, 34%;
+  --secondary-foreground: 0, 0%, 100%;
 
-    --border: 0, 0%, 69%;
+  --border: 0, 0%, 69%;
 
-    --negative: 359, 85%, 38%;
-    --negative-foreground: 0, 0%, 100%;
-  }
+  --negative: 359, 85%, 38%;
+  --negative-foreground: 0, 0%, 100%;
+
 }
+
 
 * {
   @apply border-border;
