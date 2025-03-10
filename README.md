@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Insurance Application Portal
 
-## Getting Started
+## Overview
+This is a Smart Insurance Application Portal that allows users to apply for different types of insurance (Health, Home, Car, Life, etc.) through dynamically generated forms. The form structure is fetched from an API, and all fields, conditions, and validations are handled dynamically.
 
-First, run the development server:
+## Tech Stack
+- **Next.js** – For building the frontend application.
+- **TypeScript** – Ensuring type safety and better development experience.
+- **Tailwind CSS** – For styling and responsive design.
+- **Formik** – For form state management.
+- **Yup** – For dynamic form validation.
+- **ShadCN** – For UI components.
+- **Fetch API** – For handling API requests.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features Implemented
+### Dynamic Forms
+- Fetches form structure from an API.
+- Dynamically renders form fields based on API response.
+- Implements conditional fields (appear/disappear based on user responses).
+- Supports nested form sections (e.g., Address, Vehicle Details).
+- Dynamically fetches select field options (e.g., states based on country selection).
+- Validates all form fields using Yup before submission.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Customizable Table View
+- Displays submitted applications in a table.
+- Supports sorting and filtering.
+- Users can dynamically select which columns to display.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### API Handling
+- Used Fetch API for making requests.
+- Implemented a **fetch service** to handle API calls efficiently.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Dark Mode
+- Implemented a dark mode toggle for better user experience.
 
-## Learn More
+## Installation & Setup
+1. Clone the repository:
+   git clone https://github.com/akbarinejadaida/smart-insurance-portal.git
+   cd your-repository
 
-To learn more about Next.js, take a look at the following resources:
+2. Install dependencies:
+  npm install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Run in development mode:
+  npm run dev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. Build and start in production mode:
+  npm run build
+  npm run start
 
-## Deploy on Vercel
+## Known Issues
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### CORS Error When Fetching States & Submitting Forms
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+There was a CORS issue when attempting to fetch states and submit forms.
+
+Below is an image of the error encountered:
+
+![CORS ERRORS](/public/image.png)
+
+Possible fixes include setting appropriate CORS headers on the backend.
+
+# Deployment
+
+The application is not deployed yet, but once deployed, the live URL will be updated here.
+**Live URL:** _Coming soon..._
