@@ -72,6 +72,7 @@ export default function TableContainer({ rows, columns }: TableContainerProps) {
     order: "asc",
   });
   const [currentPage, setCurrentPage] = useState(1);
+  const [filterText, setFilterText] = useState("");
   const rowsPerPage = 10;
   const [visibleColumns, setVisibleColumns] = useState(columns);
 
@@ -92,9 +93,18 @@ export default function TableContainer({ rows, columns }: TableContainerProps) {
     setCurrentPage(newPage);
   }, []);
 
+  const filteredRows = useMemo(() => {
+    if (!filterText) return rows;
+    return rows.filter((row) =>
+      visibleColumns.some((col) =>
+        row[col]?.toString().toLowerCase().includes(filterText.toLowerCase())
+      )
+    );
+  }, [rows, filterText, visibleColumns]);
+
   const sortedRows = useMemo(() => {
-    if (!sortConfig.column) return rows;
-    return [...rows].sort((a, b) => {
+    if (!sortConfig.column) return filteredRows;
+    return [...filteredRows].sort((a, b) => {
       const valA = a[sortConfig.column!];
       const valB = b[sortConfig.column!];
       return valA < valB
@@ -107,7 +117,7 @@ export default function TableContainer({ rows, columns }: TableContainerProps) {
           : -1
         : 0;
     });
-  }, [sortConfig, rows]);
+  }, [sortConfig, filteredRows]);
 
   const totalPages = Math.ceil(sortedRows.length / rowsPerPage);
 
@@ -118,6 +128,14 @@ export default function TableContainer({ rows, columns }: TableContainerProps) {
 
   return (
     <div className="w-full flex flex-col gap-8">
+      <input
+        type="text"
+        placeholder="Filter rows..."
+        value={filterText}
+        onChange={(e) => setFilterText(e.target.value)}
+        className="px-3 py-2 border rounded-sm w-full"
+      />
+
       <ColumnVisibilityToggle
         columns={columns}
         visibleColumns={visibleColumns}
