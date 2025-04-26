@@ -70,4 +70,4 @@ Possible fixes include setting appropriate CORS headers on the backend.
 
 # Deployment
 
-**Live URL:** (https://smart-insurance-portal-rljkvukrm-akbarinejadaida-hobbies.vercel.app/)
+**Live URL:** (https://smart-insurance-portal-eight.vercel.app/)

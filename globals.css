@@ -5,13 +5,13 @@
 @theme inline {
   --color-background: hsla(var(--background));
   --color-foreground: hsla(var(--foreground));
-  
+
   --color-primary: hsla(var(--primary));
   --color-primary-foreground: hsla(var(--primary-foreground));
-  
+
   --color-secondary: hsla(var(--secondary));
   --color-secondary-foreground: hsla(var(--secondary-foreground));
-  
+
   --color-border: hsla(var(--border));
 
   --color-negative: hsla(var(--negative));
@@ -32,7 +32,6 @@
 
   --negative: 359, 85%, 38%;
   --negative-foreground: 0, 0%, 100%;
-
 }
 
 .dark {
@@ -49,9 +48,7 @@
 
   --negative: 359, 85%, 38%;
   --negative-foreground: 0, 0%, 100%;
-
 }
-
 
 * {
   @apply border-border;
